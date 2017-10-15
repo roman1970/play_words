@@ -1,20 +1,16 @@
 <?php
-/*
-session_start();
-unset($_SESSION);
-session_destroy();
-*/
 session_start();
 //var_dump($_SESSION); exit;
 ini_set('display_errors', 1);
-//ini_set('session.use_cookies', 0);
-//phpinfo(); exit;
+require_once(__DIR__ . "/params.php");
 require_once(__DIR__ . "/classes/User.php");
 require_once(__DIR__ . "/classes/Word.php");
 require_once(__DIR__ . "/classes/Validator.php");
 
 //Базу пока включаем костылём
-Word::$db = new PDO('mysql:host=localhost;dbname=plis;charset=UTF8', 'root', 'vbifcdtnf', [PDO::ATTR_PERSISTENT => true]);
+Word::$db = new PDO("mysql:host=".
+    $params['host'].";dbname=".$params['dbname'].";charset=".$params['charset'], 
+    $params['user'], $params['psw'], [PDO::ATTR_PERSISTENT => true]);
 
 
 if(isset($_GET['u_word'])){
