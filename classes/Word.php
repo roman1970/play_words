@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * Class Word для работы с моделью Слова,
+ * реализованной в таблице БД MySQL play_words, которую можно создать запросом
+ * CREATE TABLE `play_words` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `word` varchar(255) NOT NULL,
+    `used` int(1) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+ */
 class Word {
 
     public $word;
@@ -12,9 +21,7 @@ class Word {
 
     public function __construct($word='')
     {
-
         $this->word = $word;
-
     }
 
     public function getRandWord(){
@@ -79,6 +86,27 @@ class Word {
         
         return 1;
 
+    }
+
+    public function selectAll(){
+        
+        $q = self::$db->query('SELECT * FROM play_words');
+
+        $res = $q->fetchAll();
+
+        return $res;
+        
+    }
+    
+    public function deleteWord($id){
+        try {
+            $q = self::$db->query('DELETE FROM play_words WHERE id = :id');
+            $stm = self::$db->prepare($q);
+            $stm->execute([":id" => $id]);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+        return true;
     }
 
     private function makeAllUnused(){

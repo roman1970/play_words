@@ -13,6 +13,10 @@ class Validator {
         $this->error = 1;
     }
 
+    public function isEmptyField(){
+        return $this->word == '' ? true : false;
+    }
+
     public function isFirstLiterRight(){
 
         $expected_first_letter = mb_strtolower(mb_substr(trim($_SESSION['word']), -1)) == 'ь' ?
@@ -34,8 +38,11 @@ class Validator {
 
     public function isWordUnused()
     {
-        /* У нас базе все использованные в игре слова у нас в базе с поднятым флагом used
+        /*
+        * У нас базе все использованные в игре слова у нас в базе с поднятым флагом used
         * - используем это для проверки уникальности слов
+         * @TODO На самом деле по заданию нужно учитывать набор использованных слов для каждого пользователя,
+         * @TODO пока используется один набор слов для всех пользователей
         */
         try {
             $sql = 'SELECT COUNT(id) FROM play_words WHERE `word` like "' . trim($this->word) . '" and `used`=1';

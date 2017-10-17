@@ -1,7 +1,9 @@
 <?php
 session_start();
-//var_dump($_SESSION); exit;
 ini_set('display_errors', 1);
+if(!isset($_SESSION['user']))    {
+    header("Location: index.php"); exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,15 +32,13 @@ ini_set('display_errors', 1);
         <h3> Моё слово: <?=$_SESSION['word']?></h3>
         <p> Тебе нужно набрать слово на
             <?=mb_substr(trim($_SESSION['word']), -1) == 'ь' ? mb_substr(trim($_SESSION['word']), -2, 1) : mb_substr(trim($_SESSION['word']), -1)?></p>
-        
-        <input type="text" class="form-control" placeholder="Твоё слово" name="word" id="users_word"  onmouseout="validateWord()">
-        <input type="hidden" class="form-control" name="user" value="<?=$_SESSION['user']?>">
+        <input type="text" class="form-control" placeholder="Твоё слово" name="word" id="users_word" onmouseleave="validateWord();" >
+        <input type="hidden" class="form-control" name="user" value="<?=$_SESSION['user']?>" id="user" >
 
         <button class="btn btn-lg btn-primary btn-block" id="sub_button" style="display: none" type="submit">Готово!</button>
+        <div id="res"></div>
     </form>
     
-    <div id="res"></div>
-
 </div> <!-- /container -->
 
 <!-- Bootstrap core JavaScript

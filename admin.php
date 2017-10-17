@@ -16,9 +16,10 @@
 <div class="container">
 
     <form class="form-signin" role="form" action="action.php" method="post">
-        <h2 class="form-signin-heading">Поиграем в слова!</h2>
-        <input type="text" class="form-control" placeholder="Ваше имя" name="name">
-       
+        <h2 class="form-signin-heading">Вход для администратора</h2>
+        <input type="text" class="form-control" placeholder="Ваше имя" name="admin">
+        <input type="password" class="form-control" placeholder="Password" required="" name="psw">
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     </form>
 
@@ -27,7 +28,8 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="js/functions.js"></script>
 
 </body>
 </html>

@@ -1,13 +1,21 @@
 <?php
 class User {
 
-    public $name;
-    
-    public $users = [
+    private $name;
+
+    /*
+     * Пользователи храняться в классе в разных свойсвах по ролям - заглушка
+     */
+    private $users = [
         'Petia',
         'Vasia',
         'Roma'
     ];
+
+    private $admins = [
+        'Director' => ['psw' => 'qwerty']
+    ];
+
     
     public function __construct($name)
     {
@@ -15,12 +23,33 @@ class User {
     }
 
 
+    /**
+     * Метод проверяет на валидность входящего пользователя
+     * @return bool
+     */
     public function isValidUser() {
 
         if(isset($_POST['name']) && in_array($_POST['name'], $this->users)){
             return true;
         }
-        else 
-            return false;
+       
+        return false;
+    }
+
+
+    /**
+     * Метод идетифицирует админа
+     * @return bool
+     */
+    public function isAdmin(){
+
+        if(isset($_POST['admin']) && array_key_exists($_POST['admin'], $this->admins)){
+            print_r($this->admins);
+            if(isset($_POST['psw']) && !strcmp($_POST['psw'], $this->admins[$_POST['admin']]['psw'])){
+                return true;
+            }
+        }
+       
+        return false;
     }
 }
