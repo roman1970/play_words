@@ -20,6 +20,8 @@
         <input type="text" class="form-control" placeholder="Ваше имя" name="name">
        
         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+        
+        <a href="post_form.php">Сгенерировать документ (задание 2)</a>
     </form>
 
 </div> <!-- /container -->

@@ -4,7 +4,7 @@ function validateWord() {
     
     $.ajax({
         type: "GET",
-        url: "http://servyz.xyz:8098/action.php?u_word="+u_word,
+        url: "http://servyz.xyz:8099/action.php?u_word="+u_word,
         success: function(html){
             if(html == '1') {
                 $("#res").html(html);
@@ -21,7 +21,7 @@ function editWord(id) {
 
     $.ajax({
         type: "GET",
-        url: "http://servyz.xyz:8098/action.php?edit_w="+id,
+        url: "http://servyz.xyz:8099/action.php?edit_w="+id,
         success: function(html){
             alert(id);
             $("#edit_"+id).html(html);
@@ -35,7 +35,7 @@ function deleteWord(id) {
 
     $.ajax({
         type: "GET",
-        url: "http://servyz.xyz:8098/action.php?delete_w="+id,
+        url: "http://servyz.xyz:8099/action.php?delete_w="+id,
         success: function(html){
             alert(id);
             $("#delete_"+id).html(html);

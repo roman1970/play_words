@@ -2,4 +2,6 @@
 .idea
 /phpunit.xml
 
-Будет удалено params.php
+/dompdf
+/vendor
+/utils
