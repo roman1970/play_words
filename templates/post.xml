@@ -1,0 +1,10 @@
+<xml version = "1.0" encoding = "utf-8">
+    <sender name="Sender">
+        <from>Откуда: {sender_from}</from>
+        <to>Куда: {sender_to}</to>
+    </sender>
+    <reciever name="Receiver">
+        <from>Откуда: {receiver_from}</from>
+        <to>Куда: {receiver_to}</to>
+    </reciever>
+</xml>

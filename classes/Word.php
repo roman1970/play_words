@@ -24,6 +24,10 @@ class Word {
         $this->word = $word;
     }
 
+    /**
+     * Случайное слово
+     * @return mixed
+     */
     public function getRandWord(){
 
         $this->makeAllUnused();
@@ -38,6 +42,10 @@ class Word {
 
     }
 
+    /**
+     * Отвечает пользователю
+     * @return mixed|null
+     */
     public function getAnswer(){
 
         $last_letter = mb_substr(trim($this->word), -1) == 'ь' ? mb_substr(trim($this->word), -2, 1) : mb_substr(trim($this->word), -1);
@@ -61,6 +69,9 @@ class Word {
 
     }
 
+    /**
+     * Неиспользованные слова
+     */
     public function getUnusedWords(){
 
         $this->words = [];
@@ -74,6 +85,11 @@ class Word {
 
     }
 
+    /**
+     * Помечаем использованные слова
+     * @param $id
+     * @return int|string
+     */
     public function makeUsed($id){
 
         try {
@@ -88,6 +104,10 @@ class Word {
 
     }
 
+    /**
+     * Выбрать всё
+     * @return mixed
+     */
     public function selectAll(){
         
         $q = self::$db->query('SELECT * FROM play_words');
@@ -97,7 +117,12 @@ class Word {
         return $res;
         
     }
-    
+
+    /**
+     * Удалить слово
+     * @param $id
+     * @return bool|string
+     */
     public function deleteWord($id){
         try {
             $q = self::$db->query('DELETE FROM play_words WHERE id = :id');
@@ -109,10 +134,18 @@ class Word {
         return true;
     }
 
+    /**
+     * Сбрасываем флаги всех слов
+     */
     private function makeAllUnused(){
         self::$db->query('UPDATE play_words SET used = 0');
     }
 
+
+    /**
+     * Если слова нет - сохраняем
+     * @return int|string
+     */
     private function insertWordIfNotExists()
     {
 

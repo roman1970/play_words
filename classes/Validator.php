@@ -13,10 +13,18 @@ class Validator {
         $this->error = 1;
     }
 
+    /**
+     * Пустое поле?
+     * @return bool
+     */
     public function isEmptyField(){
         return $this->word == '' ? true : false;
     }
 
+    /**
+     * Правильная ли первая буква
+     * @return bool
+     */
     public function isFirstLiterRight(){
 
         $expected_first_letter = mb_strtolower(mb_substr(trim($_SESSION['word']), -1)) == 'ь' ?
@@ -36,6 +44,10 @@ class Validator {
         
     }
 
+    /**
+     * Не используем использованное
+     * @return int|string
+     */
     public function isWordUnused()
     {
         /*
@@ -65,6 +77,10 @@ class Validator {
 
     }
 
+    /**
+     * Короткие слова
+     * @return bool|int
+     */
     public function isShorterThenThreeLetters(){
         
         if(mb_strlen($this->word) <= 3){
@@ -77,6 +93,11 @@ class Validator {
         }
     }
 
+    /**
+     * Три гласные подря
+     * @TODO Пока не реализовано
+     * @return bool
+     */
     public function isThreeOrMoreVowelsInRow(){
 
         $vowels = $this->mb_str_split('aeиоуюяэыё');
@@ -109,6 +130,12 @@ class Validator {
         return $this->error;
     }
 
+    /**
+     * Вспомогательная функция
+     * @param $string
+     * @param int $string_length
+     * @return array
+     */
     private function mb_str_split($string,$string_length=1) {
         if(mb_strlen($string)>$string_length || !$string_length) {
             do {

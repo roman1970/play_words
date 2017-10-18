@@ -10,7 +10,7 @@
     <link href="css/signin.css" rel="stylesheet">
 </head>
 <style>
-    *{ font-family: DejaVu Sans !important;}
+
 </style>
 <body>
 
@@ -23,6 +23,9 @@
         <h2 class="form-signin-heading">Получатель</h2>
         <input type="text" class="form-control" placeholder="От кого" name="receiver_from">
         <input type="text" class="form-control" placeholder="Куда" required="" name="receiver_to">
+
+        <input type="radio" name="file_type" value="xml">XML</br>
+        <input type="radio" name="file_type" value="pdf">PDF
         <button class="btn btn-lg btn-primary btn-block" type="submit">Сгенерировать</button>
     </form>
 
