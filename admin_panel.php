@@ -1,11 +1,9 @@
 <?php
 require_once(__DIR__ . "/params.php");
+require_once(__DIR__ . "/bd_connection.php");
 require_once(__DIR__ . "/classes/Word.php");
-Word::$db = new PDO("mysql:host=".
-    $params['host'].";dbname=".$params['dbname'].";charset=".$params['charset'],
-    $params['user'], $params['psw'], [PDO::ATTR_PERSISTENT => true]);
 
-$word = new Word();
+$word = new Word($db_connection);
 
 $arr_request = $word->selectAll();
 ?>
@@ -41,7 +39,7 @@ $arr_request = $word->selectAll();
                         <?php foreach ($arr_request as $word) : ?>
                             <tr>
                               <td><?=$word['id']?></td>
-                              <td><?=$word['word']?></td>
+                              <td contenteditable="true" id="word_<?=$word['id']?>"><?=$word['word']?></td>
                               <td id="edit_<?=$word['id']?>" style="cursor: pointer" onclick="editWord(<?=$word['id']?>)">Редактровать</td>
                               <td id="delete_<?=$word['id']?>" style="cursor: pointer" onclick="deleteWord(<?=$word['id']?>)">Удалить</td>
                             </tr>

@@ -125,14 +125,33 @@ class Word {
      * @return bool|string
      */
     public function deleteWord($id){
+
         try {
-            $q = self::$db->query('DELETE FROM play_words WHERE id = :id');
-            $stm = self::$db->prepare($q);
-            $stm->execute([":id" => $id]);
+            self::$db->exec('DELETE FROM play_words WHERE id = '.$id);
+
         } catch (PDOException $e) {
             return $e->getMessage();
         }
-        return true;
+        return 1;
+    }
+
+    /**
+     * Редактирует слово
+     * @param $id
+     * @param $new_word
+     * @return int|string
+     */
+    public function editWord($id, $new_word){
+
+        try {
+            $sql = "UPDATE `play_words` SET `word`= :new_word WHERE `id` = :id";
+            $stm = self::$db->prepare($sql);
+            $stm->execute([":id" => $id, ":new_word" => $new_word]);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+
+        return 1;
     }
 
     /**

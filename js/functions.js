@@ -23,11 +23,14 @@ function validateWord() {
 
 function editWord(id) {
 
+    var e_word = $("#word_"+id).html();
+    //alert(e_word);
+
     $.ajax({
         type: "GET",
-        url: "http://servyz.xyz:8099/action.php?edit_w="+id,
+        url: "http://servyz.xyz:8099/action.php?id="+id+"&e_word="+e_word,
         success: function(html){
-            alert(id);
+
             $("#edit_"+id).html(html);
             
         }
@@ -36,12 +39,13 @@ function editWord(id) {
 }
 
 function deleteWord(id) {
+    alert('Вы уверены в себе?');
 
     $.ajax({
         type: "GET",
         url: "http://servyz.xyz:8099/action.php?delete_w="+id,
         success: function(html){
-            alert(id);
+
             $("#delete_"+id).html(html);
         }
 

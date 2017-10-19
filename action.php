@@ -78,15 +78,18 @@ if(isset($_POST['word']) && isset($_POST['user'])) {
 }
 
 // Запрос на редактрование
-if(isset($_GET['edit_w'])) {
-    // Заглушим, а вообще - перебрасываем на форму:
-    // header("Location: admin/edit.php"); exit();
-    echo 'Редактировано!';
+if(isset($_GET['id']) && isset($_GET['e_word'])) {
+    $word = new Word($db_connection);
+    if($word->editWord($_GET['id'], $_GET['e_word']))
+        echo 'Редактировано!';
+    else
+        echo 'Ошибка';
 }
 
 // Запрос на удаление
 if(isset($_GET['delete_w'])) {
-    //if($word->deleteWord((int)$_GET['delete_w']))
+    $word = new Word($db_connection);
+    if($word->deleteWord($_GET['delete_w']))
         echo 'Удалено!';
 }
 
