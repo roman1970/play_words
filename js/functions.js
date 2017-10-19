@@ -7,10 +7,14 @@ function validateWord() {
         url: "http://servyz.xyz:8099/action.php?u_word="+u_word,
         success: function(html){
             if(html == '1') {
-                $("#res").html(html);
+                $("#res").hide();
                 $("#sub_button").show();
             }
-            else $("#res").html(html);
+            else {
+                $("#res").show();
+                $("#res").html(html);
+                $("#sub_button").hide();
+            }
         }
         
     });

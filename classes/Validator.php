@@ -1,6 +1,4 @@
 <?php
-require_once(__DIR__ . "/Word.php");
-
 class Validator {
 
     private $word;
@@ -14,7 +12,7 @@ class Validator {
     }
 
     /**
-     * Пустое поле?
+     * Пустое поле
      * @return bool
      */
     public function isEmptyField(){
@@ -94,59 +92,85 @@ class Validator {
     }
 
     /**
-     * Три гласные подря
-     * @TODO Пока не реализовано
+     * Три гласные подряд
      * @return bool
      */
-    public function isThreeOrMoreVowelsInRow(){
+    public function isThreeOrMoreVowelOrConsonantsIsInRow(){
 
-        $vowels = $this->mb_str_split('aeиоуюяэыё');
-        $vowel_count = 0;
-        $word = $this->word;
-
-
-        for($i=0;$i<count($word)-1;$i++) {
-
-            if(mb_strpos('aeиоуюяэыё', $word[$i])){
-                if($vowel_count == 2) {
-                    $this->error = 0;
-                    return true;
-                }
-                $vowel_count++;
-            }
-            else {
-                
-                $this->error = 1;
-                return false;
-            }
-
+        if(preg_match('/[еаоиуюяэыёАЕИУОЮЯЫЭЁ]{4,}/u', $this->word)) {
+            $this->error = 0;
+            return true;
         }
-        $this->error = 1;
-        return false;
+
+        if(preg_match('/[бвгджзклмнпрстфхчцщшъьБВГДЖЗКЛМНПРСТФХЧЦЩШЪЬ]{4,}/u', $this->word)) {
+            $this->error = 0;
+            return true;
+        }
+
+        else{
+            $this->error = 1;
+            return false;
+        }
 
     }
+
+    /**
+     * Одни гласные
+     * @return bool
+     */
+    public function isOnlyVowel(){
+
+        if(preg_match('/^[еаоиуюяэыёАЕИУОЮЯЫЭЁ]*$/u', $this->word)) {
+            $this->error = 0;
+            return true;
+        }
+
+        else{
+            $this->error = 1;
+            return false;
+        }
+    }
+
+    /**
+     * Одни согласные
+     * @return bool
+     */
+    public function isOnlyConsonants(){
+
+        if(preg_match('/^[бвгджзклмнпрстфхчцщшъьБВГДЖЗКЛМНПРСТФХЧЦЩШЪЬ]*$/u', $this->word)) {
+            $this->error = 0;
+            return true;
+        }
+
+        else{
+            $this->error = 1;
+            return false;
+        }
+    }
+
+
+    /**
+     * Только символы русского алфавита
+     * @return bool
+     */
+    public function hasNonRightSymbols(){
+
+        if(preg_match('/[^А-Яа-яЁё]+/u', $this->word)) {
+            $this->error = 0;
+            return true;
+        }
+
+        else{
+            $this->error = 1;
+            return false;
+        }
+    }
+
+
+
     
     public function isError(){
         return $this->error;
     }
 
-    /**
-     * Вспомогательная функция
-     * @param $string
-     * @param int $string_length
-     * @return array
-     */
-    private function mb_str_split($string,$string_length=1) {
-        if(mb_strlen($string)>$string_length || !$string_length) {
-            do {
-                $c = mb_strlen($string);
-                $parts[] = mb_substr($string,0,$string_length);
-                $string = mb_substr($string,$string_length);
-            }
-            while(!empty($string));
-        } else {
-            $parts = array($string);
-        }
-        return $parts;
-    }
 }

@@ -32,11 +32,11 @@ if(!isset($_SESSION['user']))    {
         <h3> Моё слово: <?=$_SESSION['word']?></h3>
         <p> Тебе нужно набрать слово на
             <?=mb_substr(trim($_SESSION['word']), -1) == 'ь' ? mb_substr(trim($_SESSION['word']), -2, 1) : mb_substr(trim($_SESSION['word']), -1)?></p>
-        <input type="text" class="form-control" placeholder="Твоё слово" name="word" id="users_word" onmouseleave="validateWord();" >
+        <input type="text" class="form-control" placeholder="Твоё слово" name="word" id="users_word" autocomplete="off" onmousemove="validateWord();" >
         <input type="hidden" class="form-control" name="user" value="<?=$_SESSION['user']?>" id="user" >
 
         <button class="btn btn-lg btn-primary btn-block" id="sub_button" style="display: none" type="submit">Готово!</button>
-        <div id="res"></div>
+        <div id="res" class="bg-danger"></div>
     </form>
     
 </div> <!-- /container -->

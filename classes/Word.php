@@ -19,8 +19,9 @@ class Word {
 
     public static $db;
 
-    public function __construct($word='')
+    public function __construct($db, $word='')
     {
+        $this::$db = $db;
         $this->word = $word;
     }
 
