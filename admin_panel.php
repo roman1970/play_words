@@ -39,8 +39,8 @@ $arr_request = $word->selectAll();
                         <?php foreach ($arr_request as $word) : ?>
                             <tr>
                               <td><?=$word['id']?></td>
-                              <td contenteditable="true" id="word_<?=$word['id']?>"><?=$word['word']?></td>
-                              <td id="edit_<?=$word['id']?>" style="cursor: pointer" onclick="editWord(<?=$word['id']?>)">Редактровать</td>
+                              <td contenteditable="true" id="word_<?=$word['id']?>" ><?=$word['word']?> </td>
+                              <td id="edit_<?=$word['id']?>" style="cursor: pointer" onclick="editWord(<?=$word['id']?>)" title="Чтобы отредактировать слово кликните на него, отредактируйте и нажмите эту кнопку">Редактировать</td>
                               <td id="delete_<?=$word['id']?>" style="cursor: pointer" onclick="deleteWord(<?=$word['id']?>)">Удалить</td>
                             </tr>
                         <?php endforeach; ?>

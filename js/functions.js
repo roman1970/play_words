@@ -26,12 +26,15 @@ function editWord(id) {
     var e_word = $("#word_"+id).html();
     //alert(e_word);
 
+    if(!e_word) {alert('Введите слово'); exit();}
+
     $.ajax({
         type: "GET",
         url: "http://servyz.xyz:8099/action.php?id="+id+"&e_word="+e_word,
         success: function(html){
 
             $("#edit_"+id).html(html);
+            $("#word_"+id).attr({"contenteditable":"false"})
             
         }
 
@@ -45,10 +48,10 @@ function deleteWord(id) {
         type: "GET",
         url: "http://servyz.xyz:8099/action.php?delete_w="+id,
         success: function(html){
+            location.reload();
 
-            $("#delete_"+id).html(html);
+            //$("#delete_"+id).html(html);
         }
 
     });
 }
-

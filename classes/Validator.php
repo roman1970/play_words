@@ -2,13 +2,14 @@
 class Validator {
 
     private $word;
-    
+    private $session_id;
     private $error;
 
     public function __construct($word)
     {
         $this->word = $word;
         $this->error = 1;
+        $this->session_id = session_id();
     }
 
     /**
@@ -48,14 +49,12 @@ class Validator {
      */
     public function isWordUnused()
     {
-        /*
-        * У нас базе все использованные в игре слова у нас в базе с поднятым флагом used
-        * - используем это для проверки уникальности слов
-         * @TODO На самом деле по заданию нужно учитывать набор использованных слов для каждого пользователя,
-         * @TODO пока используется один набор слов для всех пользователей
-        */
+
         try {
-            $sql = 'SELECT COUNT(id) FROM play_words WHERE `word` like "' . trim($this->word) . '" and `used`=1';
+
+            $sql = "SELECT COUNT(id) FROM user_word WHERE (word_id IN 
+                  (SELECT id FROM play_words WHERE word LIKE '". trim($this->word) . "') AND session_id LIKE '".$this->session_id. "')";
+
 
             if ($res = Word::$db->query($sql)) {
 

@@ -1,3 +1,10 @@
+<?php
+session_start();
+$_SESSION=[];
+session_unset();
+setcookie(session_name(), "", time()-3600);
+session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

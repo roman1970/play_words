@@ -33,17 +33,21 @@ if(isset($_GET['u_word'])){
 if(isset($_POST['name'])) {
     
     $user = new User($_POST['name']);
-    $word = new Word($db_connection);
+
+    //var_dump($user->getId()); exit();
+    $word = new Word($db_connection, $user->getId());
    // echo $word->getRandWord(); exit;
 
     if($user->isValidUser()) {
 
         $_SESSION['user'] = $_POST['name'];
-        //var_dump($word->getRandWord()); exit;
+        //var_dump(session_id()); exit;
         $_SESSION['word'] = $word->getRandWord();
 
         header("Location: play_word.php"); exit();
     } else {
+        unset($_SESSION['user']);
+        session_destroy();
         echo 'Вам нельзя играть';
     }
 }
@@ -56,6 +60,8 @@ if(isset($_POST['admin'])){
 
         header("Location: admin_panel.php"); exit();
     } else {
+        unset($_SESSION['user']);
+        session_destroy();
         echo 'Вход запрещён!';
     }
 
@@ -64,12 +70,16 @@ if(isset($_POST['admin'])){
 // Запрос на проверку слова
 if(isset($_POST['word']) && isset($_POST['user'])) {
     //echo $_POST['user']; exit;
-    $user = $_POST['user'];
-    $word = new Word($db_connection, $_POST['word']);
+    //$user = $_POST['user'];
+    $user = new User($_POST['user']);
+    $word = new Word($db_connection, $user->getId(), $_POST['word']);
+
+        //echo $word->getAnswer(); exit();
 
         if($answer = $word->getAnswer()) $_SESSION['word'] = $answer;
     
         else {
+            session_regenerate_id();
             header("Location: game_over.php"); exit();
         }
 
@@ -90,8 +100,6 @@ if(isset($_GET['id']) && isset($_GET['e_word'])) {
 if(isset($_GET['delete_w'])) {
     $word = new Word($db_connection);
     if($word->deleteWord($_GET['delete_w']))
-        echo 'Удалено!';
+       echo 1;
 }
-
-
 

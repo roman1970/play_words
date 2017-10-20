@@ -1,28 +1,40 @@
 <?php
 /**
  * Class Word для работы с моделью Слова,
- * реализованной в таблице БД MySQL play_words, которую можно создать запросом
+ * реализованной в таблице БД MySQL play_words, которую можно создать так
  * CREATE TABLE `play_words` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `word` varchar(255) NOT NULL,
-    `used` int(1) NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+ * Также мы используем таблицу many-many для привязки запросов к сессии(пользователю),
+ * которую можно создать так:
+ * CREATE TABLE `user_word` (
+     'id' int(11) NOT NULL AUTO_INCREMENT,
+     'session_id' INT(12) NOT NULL,
+     'word_id' INT(8) NOT NULL,
+    PRIMARY KEY (`id`)
+ * ) DEFAULT CHARSET=utf8 ENGINE = INNODB'
+ *
  */
 class Word {
 
-    public $word;
+    private $word;
+    private $user;
+    private $session_id;
     
     public $words = [
-        //'Рига', 'Астрахань', 'Нягань', 'Новосибирск', 'Москва', 'Курск'
+
     ];
 
     public static $db;
 
-    public function __construct($db, $word='')
+    public function __construct($db, $user=0, $word='')
     {
         $this::$db = $db;
         $this->word = $word;
+        $this->user = $user;
+        $this->session_id = session_id();
     }
 
     /**
@@ -31,13 +43,11 @@ class Word {
      */
     public function getRandWord(){
 
-        $this->makeAllUnused();
-
-        $this->getUnusedWords();
+        $this->getWords();
 
         $rand_id = rand(1, count($this->words)-1);
 
-        $this->makeUsed($rand_id);
+        $this->cacheUserWord($this->user, $rand_id);
 
         return $this->words[$rand_id];
 
@@ -53,30 +63,29 @@ class Word {
 
         $this->insertWordIfNotExists();
 
-        //return $last_letter;
-        $this->getUnusedWords();
-
-        //var_dump($this->words);
+        $this->getUnusedWordsInSession();
 
         foreach ($this->words as $key => $word){
             //return $word;
             if($last_letter == mb_substr(trim(mb_strtolower($word)), 0, 1)){
-                $this->makeUsed($key);
-                return $word;
+
+                if($this->cacheUserWord($this->user, $key)) {
+                    return $word;
+                }
+                else null;
             }
             
         }
         return null;
-
     }
 
     /**
      * Неиспользованные слова
      */
-    public function getUnusedWords(){
+    private function getWords(){
 
         $this->words = [];
-        $q = self::$db->query('SELECT id,word FROM play_words WHERE used=0');
+        $q = self::$db->query('SELECT id,word FROM play_words');
 
         // var_dump($q); exit;
 
@@ -87,22 +96,21 @@ class Word {
     }
 
     /**
-     * Помечаем использованные слова
-     * @param $id
-     * @return int|string
+     * Получаем не использованные в текущей сессии слова
+     * @return string
      */
-    public function makeUsed($id){
-
+    private function getUnusedWordsInSession(){
+        $this->words = [];
         try {
-            $sql = "UPDATE `play_words` SET `used`=1 WHERE `id` = :id";
-            $stm = self::$db->prepare($sql);
-            $stm->execute([":id" => $id]);
+            $q = self::$db->query("SELECT id,word FROM play_words WHERE id NOT IN 
+                                      (SELECT word_id FROM user_word WHERE session_id LIKE '".$this->session_id."')");
         } catch (PDOException $e) {
             return $e->getMessage();
         }
-        
-        return 1;
 
+        foreach ($q as $item){
+            $this->words[$item['id']] = $item['word'];
+        }
     }
 
     /**
@@ -155,14 +163,6 @@ class Word {
     }
 
     /**
-     * Сбрасываем флаги всех слов
-     */
-    private function makeAllUnused(){
-        self::$db->query('UPDATE play_words SET used = 0');
-    }
-
-
-    /**
      * Если слова нет - сохраняем
      * @return int|string
      */
@@ -189,5 +189,16 @@ class Word {
         }
 
         return 0;
+    }
+
+    private function cacheUserWord($user, $word){
+        try {
+            $sql = "INSERT INTO `user_word` (`user_id`,`word_id`, `session_id`) VALUES(:user_id,:word_id,:session_id)";
+            $stm = self::$db->prepare($sql);
+            $stm->execute([":user_id" => $user, ":word_id" => $word, ":session_id" => session_id()]);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+        return true;
     }
 }

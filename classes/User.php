@@ -52,4 +52,8 @@ class User {
        
         return false;
     }
+
+    public function getId(){
+        return array_search($this->name,$this->users);
+    }
 }
