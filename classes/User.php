@@ -9,7 +9,8 @@ class User {
     private $users = [
         'Petia',
         'Vasia',
-        'Roma'
+        'Roma',
+        'Comp'
     ];
 
     private $admins = [

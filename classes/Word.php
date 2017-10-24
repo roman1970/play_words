@@ -35,6 +35,7 @@ class Word {
         $this->word = $word;
         $this->user = $user;
         $this->session_id = session_id();
+        $this->getWords();
     }
 
     /**
@@ -43,13 +44,18 @@ class Word {
      */
     public function getRandWord(){
 
-        $this->getWords();
-
         $rand_id = rand(1, count($this->words)-1);
 
-        $this->cacheUserWord($this->user, $rand_id);
+        // слова с данным айдишником может и не быть
 
-        return $this->words[$rand_id];
+        if($this->isExistsById($rand_id)){
+
+            $this->cacheUserWord($this->user, $rand_id);
+
+            return $this->words[$rand_id];
+        }
+
+        else $this->getRandWord();
 
     }
 
@@ -61,7 +67,12 @@ class Word {
 
         $last_letter = mb_substr(trim($this->word), -1) == 'ь' ? mb_substr(trim($this->word), -2, 1) : mb_substr(trim($this->word), -1);
 
+
         $this->insertWordIfNotExists();
+
+        //return $this->getId(); exit;
+
+        $this->cacheUserWord($this->user, $this->getId());
 
         $this->getUnusedWordsInSession();
 
@@ -191,6 +202,12 @@ class Word {
         return 0;
     }
 
+    /**
+     * Привязываем слово к сессии
+     * @param $user
+     * @param $word
+     * @return bool|string
+     */
     private function cacheUserWord($user, $word){
         try {
             $sql = "INSERT INTO `user_word` (`user_id`,`word_id`, `session_id`) VALUES(:user_id,:word_id,:session_id)";
@@ -200,5 +217,35 @@ class Word {
             return $e->getMessage();
         }
         return true;
+    }
+
+    /**
+     * Получаем айдишник
+     * @return mixed
+     */
+    private function getId(){
+        $sql = 'SELECT id FROM play_words WHERE `word` like "' . $this->word . '"';
+
+        $res = self::$db->query($sql);
+
+        return $res->fetch(PDO::FETCH_ASSOC)['id'];
+
+       // return $res;
+    }
+
+
+    private function isExistsById($id){
+
+        $sql = "SELECT COUNT(id) FROM play_words WHERE id=$id";
+
+        if ($res = self::$db->query($sql)) {
+
+            if ($res->fetchColumn() == 0) {
+                return false;
+
+            }
+            else return true;
+        }
+
     }
 }
