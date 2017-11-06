@@ -37,6 +37,6 @@ session_destroy();
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 
-
+<script src="./bardzilla.js"></script>
 </body>
 </html>

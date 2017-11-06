@@ -234,6 +234,7 @@ class Word {
     }
 
 
+
     private function isExistsById($id){
 
         $sql = "SELECT COUNT(id) FROM play_words WHERE id=$id";
